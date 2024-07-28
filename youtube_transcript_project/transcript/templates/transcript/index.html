@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Transcript to Detailed Notes Converter</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'transcript/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.0/marked.min.js"></script>
+</head>
+<body>
+    <nav>
+        <h1>YouTube Video to Notes Converter</h1>
+    </nav>
+    <div class="container">
+        <h1>YouTube Transcript to Detailed Notes Converter</h1>
+        <input type="text" id="youtube_link" placeholder="Enter YouTube Video Link">
+        <button id="get_notes">Get Detailed Notes</button>
+        <div id="loading">Loading...</div>
+        <div id="thumbnail"></div>
+        <div id="summary" class="formatted-output"></div>
+
+        <h2>Chat with Video</h2>
+        <input type="text" id="question" placeholder="Ask a question about the video">
+        <button id="ask_question">Ask</button>
+        <div id="loading-question">Loading...</div>
+        <div id="answers" class="formatted-output"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#loading').hide();
+            $('#loading-question').hide();
+
+            function toggleLoading(selector, show) {
+                if (show) {
+                    $(selector).show();
+                } else {
+                    $(selector).hide();
+                }
+            }
+
+            $('#get_notes').click(function() {
+                var youtube_link = $('#youtube_link').val();
+                if (youtube_link) {
+                    var video_id = youtube_link.split("v=")[1].split("&")[0];
+                    $('#thumbnail').html('<img src="http://img.youtube.com/vi/' + video_id + '/0.jpg" width="400">');
+                    toggleLoading('#loading', true);
+                    $.get('/get_notes/', { youtube_link: youtube_link }, function(data) {
+                        toggleLoading('#loading', false);
+                        if (data.summary) {
+                            $('#summary').html(marked(data.summary));
+                        } else {
+                            $('#summary').html('<p>' + data.error + '</p>');
+                        }
+                    });
+                }
+            });
+
+            $('#ask_question').click(function() {
+                var youtube_link = $('#youtube_link').val();
+                var question = $('#question').val();
+                if (youtube_link && question) {
+                    toggleLoading('#loading-question', true);
+                    $.get('/ask_question/', { youtube_link: youtube_link, question: question }, function(data) {
+                        toggleLoading('#loading-question', false);
+                        if (data.answer) {
+                            $('#answers').append('<p><strong>Q:</strong> ' + question + '<br><strong>A:</strong> ' + marked(data.answer) + '</p>');
+                        } else {
+                            $('#answers').append('<p>' + data.error + '</p>');
+                        }
+                    });
+                }
+            });
+
+            $('#youtube_link').keypress(function(e) {
+                if (e.which == 13) { // Enter key pressed
+                    $('#get_notes').click();
+                }
+            });
+
+            $('#question').keypress(function(e) {
+                if (e.which == 13) { // Enter key pressed
+                    $('#ask_question').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
