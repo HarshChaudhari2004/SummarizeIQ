@@ -4,7 +4,7 @@ import google.generativeai as genai
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound
 
 # Hardcoded API key
-genai.configure(api_key = "AIzaSyC9ILUdqq2VGYKMaTOWBOUNi42Ei9egCa4")
+genai.configure(api_key = "your api key")
 
 
 prompt = """You are a YouTube video summarizer and note maker. You will be taking the transcript text 
