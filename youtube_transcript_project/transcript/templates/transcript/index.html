@@ -8,24 +8,48 @@
     <link rel="stylesheet" href="{% static 'transcript/styles.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.0/marked.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav>
         <h1>YouTube Video to Notes Converter</h1>
     </nav>
     <div class="container">
-        <h1>YouTube Transcript to Detailed Notes Converter</h1>
-        <input type="text" id="youtube_link" placeholder="Enter YouTube Video Link">
-        <button id="get_notes">Get Detailed Notes</button>
-        <div id="loading">Loading...</div>
+        <div class="input-group">
+            <input type="text" id="youtube_link" placeholder="Paste YouTube video URL here...">
+            <button id="get_notes">Generate Notes</button>
+        </div>
+        
+        <div class="loading-indicator" id="loading">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Processing video...</span>
+        </div>
+
         <div id="thumbnail"></div>
         <div id="summary" class="formatted-output"></div>
 
-        <h2>Chat with Video</h2>
-        <input type="text" id="question" placeholder="Ask a question about the video">
-        <button id="ask_question">Ask</button>
-        <div id="loading-question">Loading...</div>
-        <div id="answers" class="formatted-output"></div>
+        <div class="chat-section">
+            <h2>Ask Questions About the Video</h2>
+            <div class="input-group">
+                <input type="text" id="question" placeholder="Type your question here...">
+                <button id="ask_question">Ask</button>
+            </div>
+            
+            <div class="loading-indicator" id="loading-question">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Getting answer...</span>
+            </div>
+            
+            <div id="answers" class="formatted-output"></div>
+        </div>
     </div>
 
     <script>
@@ -45,7 +69,13 @@
                 var youtube_link = $('#youtube_link').val();
                 if (youtube_link) {
                     var video_id = youtube_link.split("v=")[1].split("&")[0];
-                    $('#thumbnail').html('<img src="http://img.youtube.com/vi/' + video_id + '/0.jpg" width="400">');
+                    $('#thumbnail').html(`
+                        <div class="thumbnail-wrapper">
+                            <img src="http://img.youtube.com/vi/${video_id}/maxresdefault.jpg" 
+                                 onerror="this.onerror=null; this.src='http://img.youtube.com/vi/${video_id}/hqdefault.jpg';" 
+                                 alt="Video thumbnail">
+                        </div>
+                    `);
                     toggleLoading('#loading', true);
                     $.get('/get_notes/', { youtube_link: youtube_link }, function(data) {
                         toggleLoading('#loading', false);

@@ -1,72 +1,236 @@
+:root {
+    --primary-color: #f97316;      /* Vibrant orange */
+    --secondary-color: #ea580c;    /* Darker orange */
+    --background-dark: #000000;    /* Dark brown-black */
+    --surface-dark: #292524;       /* Warm dark gray */
+    --text-primary: #fafaf9;       /* Warm white */
+    --text-secondary: #d6d3d1;     /* Light warm gray */
+    --accent-color: #65a30d;       /* Lime green */
+    --error-color: #dc2626;        /* Red */
+    --highlight-color: #fbbf24;    /* Amber yellow */
+}
+
 body {
-    background-color: #121212;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-h1, h2 {
-    color: #ffffff;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
 }
 
-input[type="text"] {
-    background-color: #333333;
-    border: 1px solid #444444;
-    color: #ffffff;
-    padding: 10px;
-    width: 80%;
-    margin-bottom: 10px;
-}
-
-input[type="text"]:hover, input[type="text"]:focus {
-    border: 1px solid #888888;
-    box-shadow: 0 0 5px #888888;
-}
-
-button {
-    background-color: #444444;
-    border: 1px solid #555555;
-    color: #ffffff;
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #555555;
-    box-shadow: 0 0 10px #ffffff;
-}
-
-#thumbnail img {
-    margin-top: 10px;
-}
-
+/* Add new gradient background to nav */
 nav {
-    background-color: #1e1e1e;
-    padding: 15px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    padding: 1.2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 nav h1 {
     margin: 0;
-    color: #ffffff;
+    font-size: 1.5rem;
+    color: var(--text-primary);
     text-align: center;
 }
 
-#loading {
-    display: none;
-    margin: 20px 0;
-    text-align: center;
+h1, h2 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+
+.input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+input[type="text"] {
+    background-color: var(--surface-dark);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 0.75rem 1rem;
+    width: 100%;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:hover, 
+input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+    outline: none;
+}
+
+button {
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+/* Update the thumbnail styles */
+#thumbnail {
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 1000px; /* Increased from 800px */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background-color: var(--background-dark);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#thumbnail img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Changed from cover to contain */
+    object-position: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+    transition: transform 0.3s ease;
+    background-color: var(--background-dark);
+}
+
+#thumbnail img:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+.loading-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    color: var(--text-secondary);
+}
+
+/* Add subtle animation to loading spinner */
+.loading-indicator svg {
+    color: var(--primary-color);
 }
 
 .formatted-output {
-    background-color: #1e1e1e;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
+    background-color: var(--surface-dark);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(249, 115, 22, 0.1);
 }
 
 .formatted-output p {
-    margin: 5px 0;
+    margin: 1rem 0;
+    color: var(--text-secondary);
+    line-height: 1.8;
 }
 
-.formatted-output h3 {
-    margin-top: 10px;
+.chat-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(249, 115, 22, 0.1);
+}
+
+.answer-block {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-left: 4px solid var(--accent-color);
+    background-color: rgba(101, 163, 13, 0.1);
+    border-radius: 0 8px 8px 0;
+}
+
+.answer-block strong {
+    color: var(--highlight-color);
+}
+
+/* Add gradient background to success messages */
+.success-message {
+    background: linear-gradient(45deg, var(--accent-color), var(--highlight-color));
+    color: var(--text-primary);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+/* Add animation to error messages */
+.error-message {
+    background-color: var(--error-color);
+    color: var(--text-primary);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Add a container query for larger screens */
+@container (min-width: 800px) {
+    #thumbnail {
+        max-width: 1000px; /* Even larger on bigger screens */
+    }
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+    }
+    
+    #thumbnail {
+        max-width: 100%;
+    }
+    
+    .thumbnail-wrapper {
+        padding-top: 56.25%; /* Maintain aspect ratio on mobile */
+    }
 }
