@@ -4,7 +4,7 @@ import google.generativeai as genai
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound
 
 # Hardcoded API key
-
+#make random function and select from list of api keys
 genai.configure(api_key = "AIzaSyAs3_dAYF7KMlWJrpdyC9TbXMwsu73A_bg")
 
 
